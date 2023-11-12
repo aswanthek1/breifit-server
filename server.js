@@ -1,7 +1,8 @@
 const express = require('express')
 const logger = require('morgan')
 const connectDB = require('./config/db')
-const dotenv  = require('dotenv').config
+const dotenv  = require('dotenv').config()
+const multer = require("multer");
 const cors = require('cors')
 const app = express()
 const port = process.env.PORT || 4000
