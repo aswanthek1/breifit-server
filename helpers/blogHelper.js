@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 module.exports = {
   ///create blog
   createBlog: (tittle, content, author) => {
-    console.log(tittle, content);
     try {
       return new Promise(async (resolve, reject) => {
         await new blogModel({ tittle, content, author })
