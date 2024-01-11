@@ -1,18 +1,18 @@
 const userTokenModel = require("../models/userTokenModel");
 const jwt = require("jsonwebtoken");
 
-const verifyRefreshToken = (refreshToken) => {
-    const privateKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
+const verifyRefreshToken = async(accessToken) => {
+    const privateKey = process.env.TOKEN_PRIVATE_KEY;
 
     try {
         return new Promise((resolve, reject) => {
-            userTokenModel.findOne({ token: refreshToken }, (err, doc) => {
-                if (!doc)
-                    return reject({ error: true, message: "Invalid refresh token" });
+            userTokenModel.findOne({ token: accessToken }, (err, doc) => {
+                if ( err || !doc)
+                    return reject({ error: true, message: "Invalid refresh token1" });
     
-                jwt.verify(refreshToken, privateKey, (err, tokenDetails) => {
+                jwt.verify(accessToken, privateKey, (err, tokenDetails) => {
                     if (err)
-                        return reject({ error: true, message: "Invalid refresh token" });
+                        return reject({ error: true, message: "Invalid refresh token2" });
                     resolve({
                         tokenDetails,
                         error: false,
@@ -21,6 +21,20 @@ const verifyRefreshToken = (refreshToken) => {
                 });
             });
         });
+        // await jwt.verify(accessToken, privateKey, (err, tokenDetails) => {
+        //     console.log(tokenDetails, "validAccesstoken")
+        //     if(err) {
+                
+        //     }
+        //     if(tokenDetails) {
+        //         return {
+        //             tokenDetails,
+        //             error: false,
+        //             message: "Valid refresh token",
+        //         }
+        //     }
+        // })
+        
     } catch (error) {
         throw new Error('Error at veriry refresh token')
     }
@@ -29,3 +43,17 @@ const verifyRefreshToken = (refreshToken) => {
 module.exports = {
     verifyRefreshToken
 }
+
+// {
+//     "_id": "659905aea4b05764e6114115",
+//     "email": "aswanthek1@gmail.com",
+//     "iat": 1704978441,
+//     "exp": 1704979281
+//   }
+
+//   {
+//     "_id": "659905aea4b05764e6114115",
+//     "email": "aswanthek1@gmail.com",
+//     "iat": 1704978441,
+//     "exp": 1707570441
+//   }

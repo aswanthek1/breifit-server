@@ -56,12 +56,17 @@ const { generateToken } = require("../utils/generateToken");
             //Hashing the input password
             req.body.password = md5(req.body.password);
             const author = await findAuthorByCred(req.body)
+            if(!author) {
+                return res.status(400).json({message: 'Invalid Credentials'})
+            }
             console.log(author, "author")
             const {accessToken, refreshToken} = await generateToken(author)
-            res.send({
+            res
+            // .cookie(('accessToken', accessToken))
+            .setHeader("Set-Cookie", {'accessToken': accessToken})
+            .send({
                 message: 'Logged in successfully.',
                 accessToken,
-                refreshToken
             })
         } catch (error) {
             next(error)

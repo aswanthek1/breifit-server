@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
+const { authenticateUser } = require("../controllers/authController");
 
 fs.readdirSync(__dirname)
   .filter((file) => {

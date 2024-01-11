@@ -6,13 +6,13 @@ const generateToken = async(user) => {
         const payload = { _id: user._id, email: user.email };
         const accessToken = jwt.sign(
             payload,
-            process.env.ACCESS_TOKEN_PRIVATE_KEY,
+            process.env.TOKEN_PRIVATE_KEY,
             { expiresIn: "14m" }
         );
         const refreshToken = jwt.sign(
             payload,
-            process.env.REFRESH_TOKEN_PRIVATE_KEY,
-            { expiresIn: "30d" }
+            process.env.TOKEN_PRIVATE_KEY,
+            { expiresIn: "14m" }
         );
         const userToken = await userTokenModel.findOne({ authorId: user._id });
         if (userToken) await userToken.remove();

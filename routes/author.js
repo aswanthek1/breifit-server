@@ -7,6 +7,7 @@ const {
     login
  } = require('../controllers/authorController')
 const { createAuthorSchema, registerAuthorSchema, loginAuthorSchema } = require('../middlewares/validators/authorValidators')
+const { authenticateUser } = require('../controllers/authController')
 
 // const storage = multer.memoryStorage();
 const storage = multer.diskStorage({
@@ -16,6 +17,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage, limits: { fileSize: 2e+7 } })
 
+// authenitication
+router.get('/authenticate', authenticateUser)
 
 // register author
 router.post("/register", registerAuthorSchema, register)
