@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const userTokenModel = require('../models/userTokenModel');
+const { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } = require('../constants/constants');
 
 const generateToken = async(user) => {
     try {
@@ -7,12 +8,12 @@ const generateToken = async(user) => {
         const accessToken = jwt.sign(
             payload,
             process.env.TOKEN_PRIVATE_KEY,
-            { expiresIn: "14m" }
+            { expiresIn: ACCESS_TOKEN_EXPIRY }
         );
         const refreshToken = jwt.sign(
             payload,
             process.env.TOKEN_PRIVATE_KEY,
-            { expiresIn: "14m" }
+            { expiresIn: REFRESH_TOKEN_EXPIRY }
         );
         const userToken = await userTokenModel.findOne({ authorId: user._id });
         if (userToken) await userToken.remove();

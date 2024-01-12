@@ -61,10 +61,8 @@ const { generateToken } = require("../utils/generateToken");
             }
             console.log(author, "author")
             const {accessToken, refreshToken} = await generateToken(author)
-            res
-            // .cookie(('accessToken', accessToken))
-            .setHeader("Set-Cookie", {'accessToken': accessToken})
-            .send({
+            res.cookie('token', accessToken)
+            res.send({
                 message: 'Logged in successfully.',
                 accessToken,
             })

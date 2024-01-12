@@ -4,12 +4,17 @@ const connectDB = require('./config/db')
 const dotenv  = require('dotenv').config()
 const multer = require("multer");
 const cors = require('cors')
+const cookieParser = require('cookie-parser');
 const app = express()
 const port = process.env.PORT || 4000
 const HttpException = require('./utils/httpException')
 const errorHandler = require('./middlewares/error.middleware')
 
-app.use(cors())
+app.use(cookieParser());
+app.use(cors({
+    origin: ["http://localhost:5002"],
+    credentials: true,
+}))
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
