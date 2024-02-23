@@ -4,7 +4,7 @@ exports.authenticateUser = async(req, res, next) => {
     try {
         console.log(req.headers.authorization, 'req.headers?.Authorization')
         console.log(req.cookie, "coooookiiieee")
-        const data = await checkAccessToken(req, res, next);
+        const data = await checkAccessToken(req, res, next, true);//true is to check if it is calling from authcontroller
         console.log(data, "data")
         // console.log(req.user, "req.user at contorller")
         let status = 200
@@ -13,8 +13,8 @@ exports.authenticateUser = async(req, res, next) => {
         }
         if(data?.accessToken) {
             // it means new token is generated
-            console.log('insidei of access')
-            res.cookie('token', data?.accessToken, {httpOnly:false})
+            // console.log('insidei of access')
+            // res.cookie('token', data?.accessToken, {httpOnly:false})
         }
         res.status(status).json({error:data?.error, message:data?.message, status:data?.status, accessToken:data?.accessToken})
     } catch (error) {

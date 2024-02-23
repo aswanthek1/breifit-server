@@ -12,7 +12,7 @@ const errorHandler = require('./middlewares/error.middleware')
 
 app.use(cookieParser());
 app.use(cors({
-    origin: ["http://localhost:5002"],
+    origin: ["http://localhost:5002", "http://localhost:4200"],
     credentials: true,
 }))
 app.use(logger('dev'))

@@ -98,7 +98,6 @@ const checkAccessToken = async (req, res, next) => {
             if (err) {
                 ///if not decode then use refresh token to create new access token.
                 const createNewAccess = await verifyRefreshToken(accessToken)
-                console.log(createNewAccess, "createNewAccess")
                 if(!createNewAccess.error && createNewAccess.status === 200 && createNewAccess.payload) {
                     req.user = createNewAccess.payload;
                     delete createNewAccess.payload;

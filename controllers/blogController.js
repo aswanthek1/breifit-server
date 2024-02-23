@@ -1,26 +1,33 @@
+const { validationResult } = require("express-validator");
 const blogHelper = require("../helpers/blogHelper");
 const blogModel = require("../models/blogModel");
+
+exports.checkValidation = (req, res) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    throw new HttpException(400, "Validation failed", result.array());
+  }
+};
 
 module.exports = {
   ///add new blog
   addBlog: async (req, res, next) => {
     try {
-      console.log(req.body, "at blog")
-      const { tittle, content, author } = req.body;
-      if (!tittle || !content || !author) {
-       return res.json({ message: "Need to fill all fields" });
-      } else {
-        blogHelper.createBlog(tittle, content, author).then((response) => {
-          res.status(200).json({ message: "Blog added successfully" });
-        });
-      }
+      this.checkValidation(req, res)
+      const { tittle, content } = req.body;
+      console.log(req.user, 'req.user at ')
+      const author = req.user?._id;
+      blogHelper.createBlog(tittle, content, author).then((response) => {
+        res.status(200).json({ message: "Blog added successfully" });
+      });
     } catch (error) {
-      next(error)
+      console.log(error)
+      next()
     }
   },
 
   ///get blog
-  getBlog: async (req, res) => {
+  getBlog: async (req, res, next) => {
     try {
       blogHelper
         .getBlog(req.params.id)
@@ -29,12 +36,12 @@ module.exports = {
         })
         .catch((error) => console.log(error));
     } catch (error) {
-      res.status(500).json("error found", error);
+      next()
     }
   },
 
   //getAllBlogs
-  getAllBlogs: async (req, res) => {
+  getAllBlogs: async (req, res, next) => {
     try {
       blogHelper
         .getAllBlog()
@@ -45,22 +52,20 @@ module.exports = {
           console.log(error);
         });
     } catch (error) {
-      console.log(error);
-      res.status(500).json("error found", error);
+      next()
     }
   },
 
-  getBlogsByPaginate: async (req, res) => {
+  getBlogsByPaginate: async (req, res, next) => {
     try {
       const pages = parseInt(req.params.pages);
-      const limit = 3;
+      const limit = req.query?.limit ? req.query?.limit : 3;
       const skip = (pages - 1) * limit;
       await blogHelper.paginatedBlogs(limit, skip).then((paginationBlogs) => {
         res.status(200).json(paginationBlogs);
       });
     } catch (error) {
-      console.log(error);
-      res.status(500).json("error found", error);
+      next()
     }
   },
 };

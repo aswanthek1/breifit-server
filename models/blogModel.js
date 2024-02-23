@@ -10,10 +10,19 @@ const blogSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    // author: {
+    //   type: String,
+    //   required: true,
+    // },
     author: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'authors',
+      required:true
     },
+    image: {
+      type: String,
+      default: null
+    }
   },
   { timestamps: true }
 );
