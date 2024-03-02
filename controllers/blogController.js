@@ -1,6 +1,9 @@
 const { validationResult } = require("express-validator");
 const blogHelper = require("../helpers/blogHelper");
 const blogModel = require("../models/blogModel");
+const { cloudinaryUpload } = require("../helpers/upload");
+const HttpException = require("../utils/httpException");
+const { BLOG_ASSETS_FOLDER_NAME } = require("../constants/constants");
 
 exports.checkValidation = (req, res) => {
   const result = validationResult(req);
@@ -14,14 +17,17 @@ module.exports = {
   addBlog: async (req, res, next) => {
     try {
       this.checkValidation(req, res)
-      const { tittle, content } = req.body;
-      console.log(req.user, 'req.user at ')
-      const author = req.user?._id;
-      blogHelper.createBlog(tittle, content, author).then((response) => {
+      if(req.file) {
+        const uploadedResult = await cloudinaryUpload(req.file?.path, BLOG_ASSETS_FOLDER_NAME)
+        if(uploadedResult) {
+            req.body.image = uploadedResult.secure_url
+        }
+      }
+      req.body.author = req.user?._id
+      blogHelper.createBlog(req.body).then((response) => {
         res.status(200).json({ message: "Blog added successfully" });
       });
     } catch (error) {
-      console.log(error)
       next()
     }
   },

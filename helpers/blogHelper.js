@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 
 module.exports = {
   ///create blog
-  createBlog: (tittle, content, author) => {
+  createBlog: (payload) => {
     try {
       return new Promise(async (resolve, reject) => {
-        await new blogModel({ tittle, content, author })
+        await new blogModel(payload)
           .save()
           .then((response) => {
             resolve(response);
@@ -61,6 +61,10 @@ module.exports = {
       return new Promise(async (resolve, reject) => {
         await blogModel
           .find()
+          .populate({
+            path:'author',
+            select: {password: 0}
+          })
           .skip(skip)
           .limit(limit)
           .then((response) => {
