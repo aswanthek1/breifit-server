@@ -14,9 +14,9 @@ exports.createAuthor = async(body) => {
 exports.findAuthorByCred = async(credentials={}) => {
     try {
         if(!credentials || !Object.keys(credentials).length || !Object.values(credentials).length) {
-             throw new Error('Email is missing' + FILE_NAME +error)
+             throw new Error('Missing credentials' + FILE_NAME +error)
         }
-        const author = await authorModel.findOne(credentials)
+        const author = await authorModel.findOne(credentials).select(["-password"])
         return author
     } catch (error) {
         throw new Error('Error Found While Finding Author by email' + FILE_NAME +error)

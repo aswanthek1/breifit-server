@@ -8,7 +8,7 @@ const verifyRefreshToken = async (accessToken) => {
 
     try {
 
-        if (!accessToken) {
+        if (!accessToken || accessToken == 'null') {
             return { error: true, message: "Invalid refresh token1", status: 400 }
         }
         console.log(accessToken, "at refres")
@@ -44,7 +44,7 @@ const verifyRefreshToken = async (accessToken) => {
             console.log(decoded, "decoded at access")
             if (decoded) {
                 // generate new access token
-                const payload = { _id: tokenModelData?.authorId?._id, email: tokenModelData?.authorId?.email };
+                const payload = { _id: tokenModelData?.authorId?._id, email: tokenModelData?.authorId?.email, role: tokenModelData?.authorId?.role };
                 const accessToken = jwt.sign(
                     payload,
                     privateKey,

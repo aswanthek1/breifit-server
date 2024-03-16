@@ -4,7 +4,7 @@ const { ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_EXPIRY } = require('../constants/cons
 
 const generateToken = async(user) => {
     try {
-        const payload = { _id: user._id, email: user.email };
+        const payload = { _id: user._id, email: user.email, role:user.role };
         const accessToken = jwt.sign(
             payload,
             process.env.TOKEN_PRIVATE_KEY,

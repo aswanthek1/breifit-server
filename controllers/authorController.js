@@ -65,6 +65,7 @@ const { generateToken } = require("../utils/generateToken");
             res.send({
                 message: 'Logged in successfully.',
                 accessToken,
+                data: author
             })
         } catch (error) {
             next(error)

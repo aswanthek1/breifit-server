@@ -29,6 +29,12 @@ const authorSchema = mongoose.Schema(
         password: {
             type:String,
             required:true,
+        },
+        role: {
+            type: String,
+            enum: ['basic', 'admin'],
+            required: true,
+            default: 'basic'
         }
     },
     { timestamps: true }
