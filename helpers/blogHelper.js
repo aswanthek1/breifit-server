@@ -20,21 +20,21 @@ module.exports = {
   ///get blog
   getBlog: (id) => {
     try {
-      if(id?.length !== 24) {
+      if (id?.length !== 24) {
         throw new Error("Invalid Id")
       }
       return new Promise(async (resolve, reject) => {
         const blogId = mongoose.Types.ObjectId(id);
         await blogModel.findOne({ _id: blogId })
-        .populate({
-          path:'author',
-          select: {password: 0}
-        })
-        .then((response) => {
-          resolve(response);
-        }).catch((error) => {
-          reject(error)
-        });
+          .populate({
+            path: 'author',
+            select: { password: 0 }
+          })
+          .then((response) => {
+            resolve(response);
+          }).catch((error) => {
+            reject(error)
+          });
       });
     } catch (error) {
       throw new Error('Error found')
@@ -55,24 +55,24 @@ module.exports = {
   },
 
   ///paginatedBlogs
-  paginatedBlogs: async(limit, skip) => {
+  paginatedBlogs: async (limit, skip) => {
     try {
       const totalCount = await blogModel.count({})
       return new Promise(async (resolve, reject) => {
         await blogModel
           .find()
           .populate({
-            path:'author',
-            select: {password: 0}
+            path: 'author',
+            select: { password: 0 }
           })
           .skip(skip)
           .limit(limit)
           .then((response) => {
-            resolve({data:response, count:totalCount, totalPage: Math.ceil(totalCount / limit)});
+            resolve({ data: response, count: totalCount, totalPage: Math.ceil(totalCount / limit) });
           });
       });
     } catch (error) {
       throw new Error('Error found')
     }
   },
-};
+}

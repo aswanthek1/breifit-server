@@ -13,9 +13,9 @@ const verifyRefreshToken = async (accessToken) => {
         }
         console.log(accessToken, "at refres")
         const decodedAccess = jwt.decode(accessToken);
-        console.log(decodedAccess._id, 'decoded access at refres')
+        console.log(decodedAccess?._id, 'decoded access at refres')
 
-        const authorId = mongoose.Types.ObjectId(decodedAccess._id)
+        const authorId = mongoose.Types.ObjectId(decodedAccess?._id)
 
         // now find refresh token from db and check validity. If valid create a new access token and save in frontent
 
@@ -90,9 +90,13 @@ const verifyRefreshToken = async (accessToken) => {
 
 const checkAccessToken = async (req, res, next) => {
     try {
-        const accessToken = req.headers?.authorization;
+        let accessToken = req.headers?.authorization;
+        // console.log(accessToken)
         if (!accessToken || accessToken == 'undefined') {
             return { error: true, message: "Invalid access token1", status: 400 }
+        }
+        if(accessToken?.startsWith('Bearer ')) {
+            accessToken = accessToken?.replace('Bearer ', '')
         }
         return await jwt.verify(accessToken, privateKey, async (err, decoded) => {
             if (err) {
@@ -104,7 +108,6 @@ const checkAccessToken = async (req, res, next) => {
                 }
                 return createNewAccess
             }
-            console.log(decoded, "decoded at access")
             if (decoded) {
                 req.user = decoded
                 return {

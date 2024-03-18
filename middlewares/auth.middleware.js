@@ -15,3 +15,17 @@ exports.authenticate = async(req, res, next) => {
         // next()
     }
 }
+
+exports.checkAdmin = (req, res, next) => {
+    try {
+        console.log(req.user, 'user at checkadmin')
+        if(req.user?.role === 'admin') {
+            next()
+        }
+        else {
+            return res.status(401).json({message: 'You are not authorized'})
+        }
+    } catch (error) {
+        console.log(error, 'error at checkadmin')
+    }
+}
