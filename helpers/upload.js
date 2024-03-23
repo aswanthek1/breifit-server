@@ -17,10 +17,10 @@ exports.cloudinaryUpload = async (filePath, folder) => {
             .then(result => {
                 return result
             }).catch((error) => {
-                console.log(error)
+                throw new Error('Error found while uploading image'+error)
             });
         return uploadResult
     } catch (error) {
-        console.log(error)
+        throw error
     }
 }

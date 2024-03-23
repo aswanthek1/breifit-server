@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
 exports.createBlogSchema = [
     body('content')
@@ -11,4 +11,10 @@ exports.createBlogSchema = [
         .withMessage("Title is required")
         .isLength({ min: '3', max: '30' })
         .withMessage('Title must need minimum 3 and can have maximum characters of 30')
+]
+
+exports.updateBlogSchema = [
+    param("id")
+    .exists()
+    .withMessage('Missing id')
 ]

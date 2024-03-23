@@ -64,9 +64,9 @@ module.exports = {
 
   getBlogsByPaginate: async (req, res, next) => {
     try {
-      const pages = parseInt(req.params.pages);
+      const page = parseInt(req.params.pages);
       const limit = req.query?.limit ? req.query?.limit : 3;
-      const skip = (pages - 1) * limit;
+      const skip = limit * page - limit;
       await blogHelper.paginatedBlogs(limit, skip).then((paginationBlogs) => {
         res.status(200).json(paginationBlogs);
       });
@@ -74,4 +74,21 @@ module.exports = {
       next()
     }
   },
+
+  updateBlog: async (req, res, next) => {
+    try {
+      this.checkValidation(req, res)
+      if(req.file) {
+        const uploadedResult = await cloudinaryUpload(req.file?.path, BLOG_ASSETS_FOLDER_NAME)
+        if(uploadedResult) {
+            req.body.image = uploadedResult.secure_url
+        }
+      }
+      const updated = await blogHelper.updateBlog(req.body, req.params?.id);
+      res.status(200).json({ message: "Blog Updated successfully" });
+    } catch (error) {
+      next()
+    }
+  }
+
 };

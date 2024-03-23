@@ -5,9 +5,10 @@ const {
   getBlog,
   getAllBlogs,
   getBlogsByPaginate,
+  updateBlog
 } = require("../controllers/blogController");
-const { authenticate } = require("../middlewares/auth.middleware");
-const { createBlogSchema } = require("../middlewares/validators/blogValidators");
+const { authenticate, checkAuthor } = require("../middlewares/auth.middleware");
+const { createBlogSchema, updateBlogSchema } = require("../middlewares/validators/blogValidators");
 const multer = require("multer");
 
 // const storage = multer.memoryStorage();
@@ -22,5 +23,6 @@ router.post("/addBlog",authenticate, upload.single('image'), createBlogSchema, a
 router.get("/getBlog/:id", getBlog);
 router.get("/allBlog", getAllBlogs);
 router.get("/getBlogsByPaginage/:pages", getBlogsByPaginate);
+router.put("/edit/:id", authenticate, upload.single('image'), checkAuthor, updateBlogSchema, updateBlog)
 
 module.exports = router;

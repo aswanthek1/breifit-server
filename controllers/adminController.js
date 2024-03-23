@@ -1,4 +1,4 @@
-const { getBlogCount, getUserCount } = require("../helpers/adminHelper");
+const { getBlogCount, getUserCount, getAllAuthors } = require("../helpers/adminHelper");
 const { generateLast5DaysDate } = require("../utils/commonUtils")
 
 exports.getChartData = async(req, res, next) => {
@@ -20,6 +20,19 @@ exports.getChartData = async(req, res, next) => {
             blogs,
             users
         })
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.getUsersData = async(req, res, next) => {
+    try {
+        const page = parseInt(req.query.page);
+        const limit = req.query?.limit ? parseInt(req.query?.limit) : 10;
+        const skip = limit * page - limit;
+        console.log(skip, 'skip')
+        const response = await getAllAuthors(limit, skip)
+        res.send(response)
     } catch (error) {
         next(error)
     }

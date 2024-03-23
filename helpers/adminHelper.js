@@ -61,5 +61,19 @@ module.exports = {
     }
   },
 
+  getAllAuthors: async (limit, skip) => {
+    try {
+      const totalCount = await authorModel.count({})
+      const authors = await authorModel
+          .find()
+          .select({ password: 0 })
+          .skip(skip)
+          .limit(limit)
+      return { data: authors, count: totalCount, totalPage: Math.ceil(totalCount / limit) }
+    } catch (error) {
+      throw new Error('Error found')
+    }
+  }
+
 }
 

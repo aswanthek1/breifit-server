@@ -67,6 +67,7 @@ module.exports = {
           })
           .skip(skip)
           .limit(limit)
+          .sort({createdAt:-1 })
           .then((response) => {
             resolve({ data: response, count: totalCount, totalPage: Math.ceil(totalCount / limit) });
           });
@@ -75,4 +76,15 @@ module.exports = {
       throw new Error('Error found')
     }
   },
+
+  updateBlog: async(payload, id=null) => {
+    try {
+      if(!id) throw new Error('Missing id');
+      const updated = await blogModel.findByIdAndUpdate(id, payload)
+      return updated
+    } catch (error) {
+      throw new Error('Error found')
+    }
+  }
+
 }

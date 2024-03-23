@@ -1,3 +1,4 @@
+const blogHelper = require("../helpers/blogHelper")
 const { checkAccessToken } = require("../utils/verifyToken")
 
 exports.authenticate = async(req, res, next) => {
@@ -27,5 +28,24 @@ exports.checkAdmin = (req, res, next) => {
         }
     } catch (error) {
         console.log(error, 'error at checkadmin')
+    }
+}
+
+exports.checkAuthor = async(req, res, next) => {
+    try {
+        if(req.user?.role === 'admin') {
+            next()
+        }
+        else {
+            const blogId = req.params?.id;
+            const blog = await blogHelper.getBlog(blogId)
+            if(blog.author?._id.toString() === req.user._id) {
+                next()
+            }else {
+                return res.status(401).json({message: 'You are not authorized.'})
+            }
+        }
+    } catch (error) {
+        next(error)
     }
 }
