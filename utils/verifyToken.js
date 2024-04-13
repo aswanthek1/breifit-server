@@ -91,7 +91,7 @@ const verifyRefreshToken = async (accessToken) => {
 const checkAccessToken = async (req, res, next) => {
     try {
         let accessToken = req.headers?.authorization;
-        // console.log(accessToken)
+        console.log(accessToken)
         if (!accessToken || accessToken == 'undefined') {
             return { error: true, message: "Invalid access token1", status: 400 }
         }
