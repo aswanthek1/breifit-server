@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const { createAuthor, findAuthorByCred } = require("../helpers/authorHelper");
+const { createAuthor, findAuthorByCred, updateAuthorById } = require("../helpers/authorHelper");
 const HttpException = require("../utils/httpException");
 const { cloudinaryUpload } = require("../helpers/upload");
 const { AUTHOR_ASSETS_FOLDER_NAME } = require("../constants/constants");
@@ -14,7 +14,7 @@ const { generateToken } = require("../utils/generateToken");
         }
     };
 
-    exports.create = async (req, res, next) => {
+    exports.updateAuthor = async (req, res, next) => {
         try {
             this.checkValidation(req, res)
             if(req.file) {
@@ -23,7 +23,8 @@ const { generateToken } = require("../utils/generateToken");
                     req.body.image = uploadedResult.secure_url
                 }
             }
-            const data = await createAuthor(req.body)
+            const userId = req.user?._id
+            const data = await updateAuthorById(userId, req.body)
             res.send({
                 message: data?.message
             })

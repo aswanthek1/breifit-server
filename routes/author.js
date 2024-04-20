@@ -2,12 +2,13 @@ const express = require('express')
 const router = express.Router()
 const multer = require("multer")
 const { 
-    create,
+    updateAuthor,
     register,
     login
  } = require('../controllers/authorController')
 const { createAuthorSchema, registerAuthorSchema, loginAuthorSchema } = require('../middlewares/validators/authorValidators')
 const { authenticateUser } = require('../controllers/authController')
+const { authenticate } = require('../middlewares/auth.middleware')
 
 // const storage = multer.memoryStorage();
 const storage = multer.diskStorage({
@@ -26,7 +27,7 @@ router.post("/register", registerAuthorSchema, register)
 // loging author
 router.post('/login', loginAuthorSchema, login )
 
-router.post("/create", upload.single('image'), createAuthorSchema, create)
+router.put("/edit", authenticate, upload.single('image'), createAuthorSchema, updateAuthor)
 
 
 

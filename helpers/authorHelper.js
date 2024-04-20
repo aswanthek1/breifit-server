@@ -22,3 +22,13 @@ exports.findAuthorByCred = async(credentials={}) => {
         throw new Error('Error Found While Finding Author by email' + FILE_NAME +error)
     }
 }
+
+exports.updateAuthorById = async(authorId, payload) => {
+    try {
+        if(!authorId) return;
+        await authorModel.findByIdAndUpdate(authorId, payload)
+        return {message: 'Author Updated Successfully'}
+    }catch(error) {
+        throw new Error('Error Found at updateAuthorById' + FILE_NAME +error)
+    }
+}
