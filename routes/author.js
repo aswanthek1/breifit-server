@@ -4,7 +4,9 @@ const multer = require("multer")
 const { 
     updateAuthor,
     register,
-    login
+    login,
+    loginByProvider,
+    getAuthorByIdOrEmail
  } = require('../controllers/authorController')
 const { createAuthorSchema, registerAuthorSchema, loginAuthorSchema } = require('../middlewares/validators/authorValidators')
 const { authenticateUser } = require('../controllers/authController')
@@ -27,8 +29,14 @@ router.post("/register", registerAuthorSchema, register)
 // loging author
 router.post('/login', loginAuthorSchema, login )
 
+// editing author
 router.put("/edit", authenticate, upload.single('image'), createAuthorSchema, updateAuthor)
 
+// signing in with provider
+router.post('/login/provider', loginByProvider )
+
+// get author by id or email
+router.get('/:id', getAuthorByIdOrEmail)
 
 
 module.exports = router;
